@@ -1,11 +1,47 @@
+
 /*  Se resolverá el problema de ecuacion diferencial paracial Parabolica
  * dependiente del tiempo.
  * Se tiene la ecuacion
- * df/dt=alpha*laplacian(f)+S , con d/dq derivada parcial
- * En este caso se hará para dos dimensiones en una region cuadrada
- * df/dt=alpha*(df/dx+df/dy)+S
  * 
+ * dΦ(x,y,t)/dt = D∇²Φ(x,y,t) +S(x,y)
+ *
+ * dΦ(x,y,t)/dt = D(∂²Φ/∂²x + ∂²Φ/∂²y) +S(x,y)
+ *
+ * Donde S(x,y) es una fuente
+ *
+ * Se genera una cuadricula de puntos, con separacion Δx ligado a i, Δy ligado a j y Δt ligado a n (sin cuadricula) 
+ * en donde, en los puntos alejados de los bordes
+ * se utiliza diferencia central para aproximar la derivada parcial
+ * 
+ * y la ecuacion queda:
+ * 
+ * Φ[n+1,i,j]=Φ[n,i,j]+D*Δt*(Φ[n,i-1,j] -2Φ[n,i,j] + Φ[n,i+1,j])/(Δx)² + (Φ[n,i,j-1] -2Φ[n,i,j] + Φ[n,i,j+1])/(Δy)² + S[i,j]*Δt
+ *
+ * si se define Cx=d*Δt/(Δx)² y Cy=d*Δt/(Δy)²,la ecuacion se puede reescribir
+ *
+ * Φ[n+1,i,j] = (1-2Cx-2Cy)*Φ[n,i,j] + Cx*(Φ[n,i-1,j] + Φ[n,i+1,j]) + Cy*(Φ[n,i,j-1] + Φ[n,i,j+1]) + S[i,j]*Δt
+ * 
+ * Para los puntos en bordes, se utiliza la condicion de borde mixta:
+ * 
+ * Para y=0,  α1Φ + β1*g1(x)* ∂Φ/∂y = γ1* f1(x)
+ * Para x=0,  α2Φ + β2*g2(x)* ∂Φ/∂x = γ2* f2(y)
+ * Para y=Ly, α3Φ + β3*g3(x)* ∂Φ/∂y = γ3* f3(x)
+ * Para x=Lx, α4Φ + β4*g4(x)* ∂Φ/∂x = γ4* f4(y)
+ *
+ * Si β==0{
+ *  β=1e-300
+ * }
+ * que permite escribir la condicion de tipo Dirichlet aproximada sin realizar grandes desajustes
+ * 
+ * Esto permite escribir la ecuacion de arriba para cada borde o esquina considerado, la insercion de puntos fantasmas (no existentes en la cuadricula):
+ *
+ * Φ[0,j]   = Φ[2,j]    -2Δx/β1(γ1-α1 * Φ[1,j] )
+ * Φ[Nx+1,j]= Φ[Nx-1,j] -2Δx/β2(γ2-α2 * Φ[Nx,j])
+ * Φ[i,0]   = Φ[i,2]    -2Δy/β3(γ3-α3 * Φ[i,1] )
+ * Φ[i,Ny+1]= Φ[i,Ny-1] -2Δy/β4(γ4-α4 * Φ[i,Ny])
  */
+
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <gsl/gsl_matrix.h>
