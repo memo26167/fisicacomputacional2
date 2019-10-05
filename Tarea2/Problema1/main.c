@@ -23,10 +23,10 @@
  * 
  * Para los puntos en bordes, se utiliza la condicion de borde mixta:
  * 
- * Para y=0,  α1Φ + β1*g1(x)* ∂Φ/∂y = γ1* f1(x)
- * Para x=0,  α2Φ + β2*g2(x)* ∂Φ/∂x = γ2* f2(y)
- * Para y=Ly, α3Φ + β3*g3(x)* ∂Φ/∂y = γ3* f3(x)
- * Para x=Lx, α4Φ + β4*g4(x)* ∂Φ/∂x = γ4* f4(y)
+ * Para y=0,  α1Φ + β1*g1(x)* ∂Φ/∂y = γ1*f1(x)
+ * Para x=0,  α2Φ + β2*g2(y)* ∂Φ/∂x = γ2*f2(y)
+ * Para y=Ly, α3Φ + β3*g3(x)* ∂Φ/∂y = γ3*f3(x)
+ * Para x=Lx, α4Φ + β4*g4(y)* ∂Φ/∂x = γ4*f4(y)
  *
  * Si β==0{
  *  β=1e-300
@@ -35,22 +35,37 @@
  * 
  * Esto permite escribir la ecuacion de arriba para cada borde o esquina considerado, la insercion de puntos fantasmas (no existentes en la cuadricula):
  *
- * Φ[0,j]   = Φ[2,j]    -2Δx/β1(γ1-α1 * Φ[1,j] )
- * Φ[Nx+1,j]= Φ[Nx-1,j] -2Δx/β2(γ2-α2 * Φ[Nx,j])
- * Φ[i,0]   = Φ[i,2]    -2Δy/β3(γ3-α3 * Φ[i,1] )
- * Φ[i,Ny+1]= Φ[i,Ny-1] -2Δy/β4(γ4-α4 * Φ[i,Ny])
+ * Φ[0,j]   = Φ[2,j]    -2Δx /β1 * (γ1 - α1*Φ[1,j] )
+ * Φ[Nx+1,j]= Φ[Nx-1,j] -2Δx /β2 * (γ2 - α2*Φ[Nx,j])
+ * Φ[i,0]   = Φ[i,2]    -2Δy /β3 * (γ3 - α3*Φ[i,1] )
+ * Φ[i,Ny+1]= Φ[i,Ny-1] -2Δy /β4 * (γ4 - α4*Φ[i,Ny])
+ *
+ * Donde está βi, enrealidad debe estar βi*gi
+ * Donde está γi, enrealidad debe estar γi*fi
  */
 
 
 #include <stdio.h>
 #include <stdlib.h>
-#include <gsl/gsl_matrix.h>
-#include <gsl/gsl_vector.h>
-#include <gsl/gsl_linalg.h>
-#include <gsl/gsl_blas.h>
+#include "header.h"
 
 int main(void)
 {
+  ecp problema;//se define el problem
+  problema.nx=100;
+  problema.ny=100;
+  problema.tol=1e-4;
+  problema.D=1;
+  problema.m_inicial= malloc(sizeof(double*)*problema.nx);
+  for (int i = 0; i < problema.nx; ++i) {
+    problema.m_inicial[i]= malloc(sizeof(double)*problema.ny);
+  }
+  
+  for (int i = 0; i < problema.nx; ++i) {
+    for (int j = 0; j < problema.ny; ++j) {
+      problema.m_inicial[i][j]=28;
+    }
+  }
   
   return 0;
 }
