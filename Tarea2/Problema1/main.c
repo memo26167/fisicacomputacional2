@@ -28,9 +28,6 @@
  * Para y=0,  α3Φ + β3*g3(x)* ∂Φ/∂y = γ3*f3(x) BORDE INFERIOR
  * Para y=Ly, α4Φ + β4*g4(x)* ∂Φ/∂y = γ4*f4(x) BORDE SUPERIOR
  *
- * Si β==0{
- *  β=1e-300
- * }
  * que permite escribir la condicion de tipo Dirichlet aproximada sin realizar grandes desajustes
  * 
  * Esto permite escribir la ecuacion de arriba para cada borde o esquina considerado, la insercion de puntos fantasmas (no existentes en la cuadricula):
@@ -52,14 +49,14 @@
 // Funcion fuente de la EDP
 double fuente(double x,double y ,double* parametros);
 // Funciones de las condiciones de borde
-double f1(double y, double* parametros);
-double f2(double y, double* parametros);
-double f3(double x, double* parametros);
-double f4(double x, double* parametros);
-double g1(double y, double* parametros);
-double g2(double y, double* parametros);
-double g3(double x, double* parametros);
-double g4(double x, double* parametros);
+double f1(double t,double y, double* parametros);
+double f2(double t,double y, double* parametros);
+double f3(double t,double x, double* parametros);
+double f4(double t,double x, double* parametros);
+double g1(double t,double y, double* parametros);
+double g2(double t,double y, double* parametros);
+double g3(double t,double x, double* parametros);
+double g4(double t,double x, double* parametros);
 
 int main(void)
 {
@@ -71,18 +68,21 @@ int main(void)
   problema.parametros[0]=28; //T infinito
   problema.parametros[1]=5; //h 
   problema.parametros[2]=401; //k
-  problema.parametros[3]=113e-6; 
+  problema.parametros[3]=113e-6; //alpha
   //constante de la EDP
-  problema.D=1;
+  problema.D=problema.parametros[3];
   
   //parametros del metodo
-  problema.nx=100;
-  problema.ny=100;
+  problema.nx=25;
+  problema.ny=25;
   problema.xi=0;
   problema.xf=1;
   problema.yi=0;
   problema.yf=1;
-  //condicion inicial
+  problema.ti=0;
+  problema.tf=30*60;
+  
+  //condicion inicia
   problema.m_inicial= malloc(sizeof(double*)*problema.nx);
   for (int i = 0; i < problema.nx; ++i) {
     problema.m_inicial[i]= malloc(sizeof(double)*problema.ny);
@@ -103,7 +103,7 @@ int main(void)
   problema.alpha[3]=0;
 
   problema.beta[0]=0;
-  problema.beta[1]=-problema.parametros[2];
+  problema.beta[1]=1;
   problema.beta[2]=1;
   problema.beta[3]=1;
   
@@ -116,48 +116,50 @@ int main(void)
   problema.g3=&g3;
   problema.g4=&g4;
 
-  resolver_metodo(problema);
+  FILE *archivo = fopen("datos.dat", "w");
+  
+  resolver_metodo(problema,archivo);
     
   return 0;
 }
 
 double fuente(double x,double y ,double* parametros){
   double S;
-  S=x*y*parametros[0]*0;
+  S=0*20*exp(-( pow(x-0.5,2)/(2*pow(0.2,2)) + pow(y-0.5,2)/(2*pow(0.2,2))   )) + parametros[0]*0;
   return S;
 }
 
-double f1(double y, double* parametros){
-  y=y*parametros[0]*0+1;
+double f1(double t,double y, double* parametros){
+  y=30+5*sin(t) + parametros[0]*0;//MODIFICADO
   return y;
 }
 
-double f2(double y, double* parametros){
-  y=y*parametros[0]*0+1;
+double f2(double t,double y, double* parametros){
+  y=parametros[0]+t*y*0;
   return y;
 }
-double f3(double x, double* parametros){
-  x=x*parametros[0]*0+1;
+double f3(double t,double x, double* parametros){
+  x=0+t*x*parametros[0]*0;
   return x;
 }
-double f4(double x, double* parametros){
-  x=x*parametros[0]*0+1;
+double f4(double t,double x, double* parametros){
+  x=0+t*x*parametros[0]*0;
   return x;
 }
-double g1(double y, double* parametros){
-  y=y*parametros[0]*0+1;
+double g1(double t,double y, double* parametros){
+  y=t*y*parametros[0]*0+1;
   return y;
 }
-double g2(double y, double* parametros){
-  y=y*parametros[0]*0+1;
+double g2(double t,double y, double* parametros){
+  y= parametros[2]/parametros[1] + t*y*parametros[0]*0;
   return y;
 }
-double g3(double x, double* parametros){
-  x=x*parametros[0]*0+1;
+double g3(double t,double x, double* parametros){
+  x=t*x*parametros[0]*0+1;
   return x;
 }
-double g4(double x, double* parametros){
-  x=x*parametros[0]*0+1;
+double g4(double t,double x, double* parametros){
+  x=t*x*parametros[0]*0+1;
   return x;
 }
 
