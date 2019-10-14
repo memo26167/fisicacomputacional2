@@ -17,7 +17,7 @@
  * 
  * Φ[n+1,i,j]=Φ[n,i,j]+D*Δt*(Φ[n,i-1,j] -2Φ[n,i,j] + Φ[n,i+1,j])/(Δx)² + (Φ[n,i,j-1] -2Φ[n,i,j] + Φ[n,i,j+1])/(Δy)² + S[i,j]*Δt
  *
- * si se define Cx=d*Δt/(Δx)² y Cy=d*Δt/(Δy)²,la ecuacion se puede reescribir
+ * si se define Cx=D*Δt/(Δx)² y Cy=D*Δt/(Δy)²,la ecuacion se puede reescribir
  *
  * Φ[n+1,i,j] = (1-2Cx-2Cy)*Φ[n,i,j] + Cx*(Φ[n,i-1,j] + Φ[n,i+1,j]) + Cy*(Φ[n,i,j-1] + Φ[n,i,j+1]) + S[i,j]*Δt
  * 
