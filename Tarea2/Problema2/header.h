@@ -2,7 +2,6 @@
 #include <stdlib.h>
 #include <math.h>
 
-
 typedef struct EcHiperbolica
 {
  /*Parametros del problema (no relacionados a la EDP, sino del contexto)*/
@@ -39,7 +38,9 @@ typedef struct EcHiperbolica
   /*Parametros del método*/
   int nx;
   int nt;
-  double tol;
   double lambda;
 
 }hiper;
+
+void resolver_metodo(hiper, FILE*);
+void rellenar_A(double **, hiper);

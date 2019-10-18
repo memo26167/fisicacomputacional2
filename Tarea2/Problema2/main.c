@@ -35,6 +35,16 @@
 #include "header.h"
 
 
+double alpha1(double t, double* parametros);
+double alpha2(double t, double* parametros);
+double beta1(double t, double* parametros);
+double beta2(double t, double* parametros);
+double gamma1(double t, double* parametros);
+double gamma2(double t, double* parametros);
+double f(double x, double* parametros);
+double g(double x, double* parametros);
+
+
 int main()
 {
   
@@ -49,7 +59,7 @@ int main()
 
   // DEFINIR TIEMPOS INICIALES
   problema.ti=0;
-  problema.tf=5;
+  problema.tf=5;//5;
   
   /* condiciones de borde */
   //coeficientes
@@ -68,38 +78,39 @@ int main()
   //funciones de condiciones de borde
 
   //FALTA DETERMINAR LAS FUNCIONES,TAMAÑOS DE GRILLA, ETC
-  double (*alpha1)(double t,double* parametros);
-  double (*alpha2)(double t,double* parametros);
+  problema.alpha1=&alpha1;
+  problema.alpha2=&alpha2;
 
-  double (*beta1)(double t,double* parametros);
-  double (*beta2)(double t,double* parametros);
+  problema.beta1=&beta1;
+  problema.beta2=&beta2;
 
-  double (*gamma1)(double t,double* parametros);
-  double (*gamma2)(double t,double* parametros);
+  problema.gamma1=&gamma1;
+  problema.gamma2=&gamma2;
   
   // funciones de condiciones iniciales
-  double (*f)(double x ,double* parametros);
-  double (*g)(double x ,double* parametros);
+  problema.f=&f;
+  problema.g=&g;
   
   /*Parametros del método*/
-  int nx;
-  int nt;
-  double tol;
-  double lambda;
-  
+  problema.nx=100;
+
+  FILE *archivo = fopen("datos.dat", "w");
+  resolver_metodo( problema, archivo);
+  fclose(archivo);
+  free(archivo);
   
   return 0;
 }
 
 double alpha1(double t, double* parametros)
 {
-  double y=1+t*0*parametros[0];
+  double y=parametros[0]*t*0+1;
   return y;
 }
 
 double alpha2(double t, double* parametros)
 {
-  double y=1+t*0*parametros[0];
+  double y=parametros[0]*t*0+1;
   return y;
 }
 
@@ -117,24 +128,25 @@ double beta2(double t, double* parametros)
 
 double gamma1(double t, double* parametros)
 {
-  double y=1+t*0*parametros[0];
+  double y=parametros[0]+t*0;
   return y;
 }
 
 double gamma2(double t, double* parametros)
 {
-  double y=1+t*0*parametros[0];
+  double y=parametros[0]+t*0;
   return y;
 }
 
 double f(double x, double* parametros)
 {
-  double y=1+x*0*parametros[0];
+  double pi=3.1415;
+  double y=parametros[0]*cos(2*pi*x);
   return y;
 }
 
 double g(double x, double* parametros)
 {
-  double y=1+x*0*parametros[0];
+  double y=0*x*parametros[0];
   return y;
 }
