@@ -27,7 +27,6 @@
  * Entonces
  * U[x,1] = g(x)Δt + U[x,0]
  * 
- * I
  */
 
 #include <stdio.h>
@@ -52,14 +51,14 @@ int main()
 
   problema.parametros=malloc(sizeof(double)*1);
   problema.parametros[0]=0.9;//p0
-  problema.D=1;//el omega cuadrado
+  problema.D=2;//el omega cuadrado
 
   problema.xi=0;
   problema.xf=1;
 
   // DEFINIR TIEMPOS INICIALES
   problema.ti=0;
-  problema.tf=5;//5;
+  problema.tf=6;
   
   /* condiciones de borde */
   //coeficientes
@@ -68,31 +67,25 @@ int main()
   // * x=0
   problema.alpha[0]=1;
   problema.beta[0]=0;
-  problema.gamma[0]=1;//problema.parametros[0];
+  problema.gamma[0]=problema.parametros[0];
   
   // * x=L
   problema.alpha[1]=0;
   problema.beta[1]=1;
-  problema.gamma[0]=1;//problema.parametros[0];
+  problema.gamma[1]=0;
 
-  //funciones de condiciones de borde
-
-  //FALTA DETERMINAR LAS FUNCIONES,TAMAÑOS DE GRILLA, ETC
-  problema.alpha1=&alpha1;
-  problema.alpha2=&alpha2;
-
-  problema.beta1=&beta1;
-  problema.beta2=&beta2;
-
-  problema.gamma1=&gamma1;
-  problema.gamma2=&gamma2;
+  // TUBO ABIERTO
+  //* x=L
+  /* problema.alpha[1]=1; */
+  /* problema.beta[1]=0; */
+  /* problema.gamma[1]=problema.parametros[0]; */
   
   // funciones de condiciones iniciales
   problema.f=&f;
   problema.g=&g;
   
   /*Parametros del método*/
-  problema.nx=100;
+  problema.nx=101;
 
   FILE *archivo = fopen("datos.dat", "w");
   resolver_metodo( problema, archivo);
@@ -102,45 +95,9 @@ int main()
   return 0;
 }
 
-double alpha1(double t, double* parametros)
-{
-  double y=parametros[0]*t*0+1;
-  return y;
-}
-
-double alpha2(double t, double* parametros)
-{
-  double y=parametros[0]*t*0+1;
-  return y;
-}
-
-double beta1(double t, double* parametros)
-{
-  double y=1+t*0*parametros[0];
-  return y;
-}
-
-double beta2(double t, double* parametros)
-{
-  double y=1+t*0*parametros[0];
-  return y;
-}
-
-double gamma1(double t, double* parametros)
-{
-  double y=parametros[0]+t*0;
-  return y;
-}
-
-double gamma2(double t, double* parametros)
-{
-  double y=parametros[0]+t*0;
-  return y;
-}
-
 double f(double x, double* parametros)
 {
-  double pi=3.1415;
+  double pi=3.14159265358979323846;
   double y=parametros[0]*cos(2*pi*x);
   return y;
 }

@@ -20,16 +20,6 @@ typedef struct EcHiperbolica
   double alpha[2];
   double beta[2];
   double gamma[2];
-
-  //funciones de condiciones de borde
-  double (*alpha1)(double t,double* parametros);
-  double (*alpha2)(double t,double* parametros);
-
-  double (*beta1)(double t,double* parametros);
-  double (*beta2)(double t,double* parametros);
-
-  double (*gamma1)(double t,double* parametros);
-  double (*gamma2)(double t,double* parametros);
   
   // funciones de condiciones iniciales
   double (*f)(double x ,double* parametros);
@@ -43,4 +33,3 @@ typedef struct EcHiperbolica
 }hiper;
 
 void resolver_metodo(hiper, FILE*);
-void rellenar_A(double **, hiper);
