@@ -12,10 +12,10 @@ void resolver_metodo(hiper p, FILE* archivo)
   //Se definen las variables del problema
   
   double delta_x=(p.xf-p.xi)/(p.nx-1);
-  p.lambda=1;
-  double lambda2=pow(p.lambda,2); //lambda cuadrado
+  p.lambda=1.0;
+  double lambda2=pow(p.lambda,2.0); //lambda cuadrado
   double delta_t=0.5*sqrt(p.lambda)*delta_x/p.D;
-  p.nt=100;//(p.tf-p.ti)/(delta_t);
+  p.nt=(p.tf-p.ti)/(delta_t); //1020 da bien
   
   double vP[p.nx];//Vector Previo
   double vA[p.nx];//Vetor Actual
@@ -48,19 +48,19 @@ void resolver_metodo(hiper p, FILE* archivo)
     t+=delta_t;
     // Puntos a un tiempo siguiente, fuera de los bordes
     for (int i = 1; i < p.nx-1; ++i) {
-      vS[i]=2*(1-lambda2)*vA[i]+lambda2*(vA[i+1]+vA[i-1])-vP[i];
+      vS[i]=2.0*(1.0-lambda2)*vA[i]+lambda2*(vA[i+1]+vA[i-1])-vP[i];
     }
     
     /* Bordes */
   
     //discretizacion de la derivada
-    vS[0]=2*delta_x/p.beta[0]*( p.alpha[0]*vS[1] - p.gamma[0]) + vS[2];
+    vS[0]=2.0*delta_x/p.beta[0]*( p.alpha[0]*vS[1] - p.gamma[0]) + vS[2];
     
     if(p.beta[0]==0){
       vS[0]=p.gamma[0]/ p.alpha[0];
     }
      
-    vS[p.nx-1]=-2*delta_x/p.beta[1]*( p.alpha[1]*vS[p.nx-2] - p.gamma[1]) + vS[p.nx-3];
+    vS[p.nx-1]=-2.0*delta_x/p.beta[1]*( p.alpha[1]*vS[p.nx-2] - p.gamma[1]) + vS[p.nx-3];
 
     if(p.beta[1]==0){
       vS[p.nx-1]=p.gamma[1]/p.alpha[1];
@@ -86,14 +86,14 @@ void resolver_metodo(hiper p, FILE* archivo)
 void rellenarVectorA(hiper p, double *vA,double*x)
 {
   double delta_x=(p.xf-p.xi)/(p.nx-1);
-  p.lambda=1;
-  double lambda2=pow(p.lambda,2); //lambda cuadrado
+  p.lambda=1.0;
+  double lambda2=pow(p.lambda,2.0); //lambda cuadrado
   double delta_t=0.5*sqrt(p.lambda)*delta_x/p.D;
   /* puntos fantasmas */
 
   //condicion justo despues de la inicial, t=0+delta_t
   for (int i = 1; i < p.nx-1; ++i) {
-    vA[i]=(1-lambda2)*p.f(x[i],p.parametros)
+    vA[i]=(1.0-lambda2)*p.f(x[i],p.parametros)
       + lambda2/2.0 * ( p.f(x[i+1],p.parametros) + p.f(x[i-1],p.parametros) )
       + delta_t*p.g(x[i],p.parametros);
   }
@@ -101,16 +101,16 @@ void rellenarVectorA(hiper p, double *vA,double*x)
   //puntos en los bordes de vA
 
   //Izquierdo
-  vA[0]=2*delta_x/p.beta[0]*( p.alpha[0]*vA[1] - p.gamma[0]) + vA[2];
+    vA[0]=2.0*delta_x/p.beta[0]*( p.alpha[0]*vA[1] - p.gamma[0]) + vA[2];
   //Dirichlet
-  if(p.beta[0]==0){
+  if(p.beta[0]==0.0){
     vA[0]=p.gamma[0] / p.alpha[0];
   }
 
   //Fantasma Derecho
-  vA[p.nx-1]=-2*delta_x/p.beta[1] *( p.alpha[1]*vA[p.nx-2] - p.gamma[1]) + vA[p.nx-3];
+  vA[p.nx-1]=-2.0*delta_x/p.beta[1] *( p.alpha[1]*vA[p.nx-2] - p.gamma[1]) + vA[p.nx-3];
   //Dirichlet
-  if(p.beta[1]==0){
+  if(p.beta[1]==0.0){
     vA[p.nx-1]=p.gamma[1]/ p.alpha[1];
   }
 }

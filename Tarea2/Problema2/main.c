@@ -51,28 +51,28 @@ int main()
 
   problema.parametros=malloc(sizeof(double)*1);
   problema.parametros[0]=0.9;//p0
-  problema.D=2;//el omega cuadrado
+  problema.D=2.0;//el omega cuadrado
 
-  problema.xi=0;
-  problema.xf=1;
+  problema.xi=0.0;
+  problema.xf=1.0;
 
   // DEFINIR TIEMPOS INICIALES
-  problema.ti=0;
-  problema.tf=6;
+  problema.ti=0.0;
+  problema.tf=6.0;
   
   /* condiciones de borde */
   //coeficientes
 
   // TUBO CERRADO
   // * x=0
-  problema.alpha[0]=1;
-  problema.beta[0]=0;
+  problema.alpha[0]=1.0;
+  problema.beta[0]=0.0;
   problema.gamma[0]=problema.parametros[0];
   
   // * x=L
-  problema.alpha[1]=0;
-  problema.beta[1]=1;
-  problema.gamma[1]=0;
+  problema.alpha[1]=0.0;
+  problema.beta[1]=1.0;
+  problema.gamma[1]=0.0;
 
   // TUBO ABIERTO
   //* x=L
@@ -85,7 +85,7 @@ int main()
   problema.g=&g;
   
   /*Parametros del método*/
-  problema.nx=101;
+  problema.nx=1001;
 
   FILE *archivo = fopen("datos.dat", "w");
   resolver_metodo( problema, archivo);
@@ -98,7 +98,7 @@ int main()
 double f(double x, double* parametros)
 {
   double pi=3.14159265358979323846;
-  double y=parametros[0]*cos(2*pi*x);
+  double y=parametros[0]*cos(2.0*pi*x);
   return y;
 }
 
