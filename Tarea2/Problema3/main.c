@@ -56,6 +56,10 @@ int main()
   }
   fprintf(archivo, "\n");
 
+  free(u_FTBS);
+  free(u_BTCS);
+  free(u_FTCS);
+  free(u_LAX);
   fclose(archivo);
   return 0;
 }
@@ -93,7 +97,7 @@ void evolucionFTCS(double*u_anterior,int nx,double gamma,double u0)
     u_siguiente[i]=-gamma/2.0*(u_anterior[i+1]-u_anterior[i-1])+u_anterior[i];
   }
   u_siguiente[0]=u0;
-  u_siguiente[nx-1]=2.0*u_siguiente[nx]-u_siguiente[nx-1];
+  u_siguiente[nx-1]=2.0*u_siguiente[nx-2]-u_siguiente[nx-3];
   
   for (int i = 0; i < nx; ++i) {
     u_anterior[i]=u_siguiente[i];
@@ -107,7 +111,7 @@ void evolucionLAX(double*u_anterior,int nx,double gamma,double u0)
     u_siguiente[i]=(u_anterior[i+1]+u_anterior[i-1])/2.0  -gamma/2.0*(u_anterior[i+1]-u_anterior[i-1]);
   }
   u_siguiente[0]=u0;
-  u_siguiente[nx-1]=2.0*u_siguiente[nx]-u_siguiente[nx-1];
+  u_siguiente[nx-1]=2.0*u_siguiente[nx-2]-u_siguiente[nx-3];
   
   for (int i = 0; i < nx; ++i) {
     u_anterior[i]=u_siguiente[i];
