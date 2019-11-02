@@ -69,18 +69,19 @@ int main(void)
   problema.parametros[1]=5; //h 
   problema.parametros[2]=401; //k
   problema.parametros[3]=113e-6; //alpha
+
   //constante de la EDP
   problema.D=problema.parametros[3];
   
   //parametros del metodo
-  problema.nx=25;
-  problema.ny=25;
+  problema.nx=20;
+  problema.ny=20;
   problema.xi=0;
   problema.xf=1;
   problema.yi=0;
   problema.yf=1;
   problema.ti=0;
-  problema.tf=30*60;
+  problema.tf=10*30*60;
   
   //condicion inicia
   problema.m_inicial= malloc(sizeof(double*)*problema.nx);
@@ -97,10 +98,10 @@ int main(void)
   problema.fuente=&fuente;
 
   /* Condiciones de borde */
-  problema.alpha[0]=1;
-  problema.alpha[1]=1;
-  problema.alpha[2]=0;
-  problema.alpha[3]=0;
+  problema.alpha[0]=1; //Izquierdo
+  problema.alpha[1]=1; //Derecho
+  problema.alpha[2]=0; //Inferior
+  problema.alpha[3]=0; //Superior
 
   problema.beta[0]=0;
   problema.beta[1]=1;
@@ -125,17 +126,17 @@ int main(void)
 
 double fuente(double x,double y ,double* parametros){
   double S;
-  S=0*20*exp(-( pow(x-0.5,2)/(2*pow(0.2,2)) + pow(y-0.5,2)/(2*pow(0.2,2))   )) + parametros[0]*0;
+  S=20*exp(-( pow(x-0.5,2)/(2*pow(0.2,2)) + pow(y-0.5,2)/(2*pow(0.2,2))   )) + parametros[0]*0;
   return S;
 }
 
 double f1(double t,double y, double* parametros){
-  y=30+5*sin(t) + parametros[0]*0;//MODIFICADO
+  y=30+5*sin(t) + parametros[0]*0;
   return y;
 }
 
 double f2(double t,double y, double* parametros){
-  y=parametros[0]+t*y*0;
+  y=parametros[0]/parametros[1]+t*y*0;
   return y;
 }
 double f3(double t,double x, double* parametros){
