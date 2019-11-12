@@ -51,14 +51,14 @@ int main()
 
   problema.parametros=malloc(sizeof(double)*1);
   problema.parametros[0]=0.9;//p0
-  problema.D=2.0;//el omega cuadrado
+  problema.D=1.0;//el omega cuadrado
 
   problema.xi=0.0;
   problema.xf=1.0;
 
   // DEFINIR TIEMPOS INICIALES
   problema.ti=0.0;
-  problema.tf=6.0;
+  problema.tf=5.0;
   
   /* condiciones de borde */
   //coeficientes
@@ -68,18 +68,20 @@ int main()
   problema.alpha[0]=1.0;
   problema.beta[0]=0.0;
   problema.gamma[0]=problema.parametros[0];
-  
-  // * x=L
+
+  // **************************************** COMENTAR O DESCOMENTAR
+  // x=L
   problema.alpha[1]=0.0;
   problema.beta[1]=1.0;
   problema.gamma[1]=0.0;
 
   // TUBO ABIERTO
-  //* x=L
-  /* problema.alpha[1]=1; */
-  /* problema.beta[1]=0; */
+  // **************************************** COMENTAR O DESCOMENTAR
+  // x=L
+  /* problema.alpha[1]=1.0; */
+  /* problema.beta[1]=0.0; */
   /* problema.gamma[1]=problema.parametros[0]; */
-  
+ 
   // funciones de condiciones iniciales
   problema.f=&f;
   problema.g=&g;

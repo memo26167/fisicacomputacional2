@@ -12,9 +12,9 @@ void resolver_metodo(hiper p, FILE* archivo)
   //Se definen las variables del problema
   
   double delta_x=(p.xf-p.xi)/(p.nx-1);
-  p.lambda=1.0;
+  p.lambda=0.355;
   double lambda2=pow(p.lambda,2.0); //lambda cuadrado
-  double delta_t=0.5*sqrt(p.lambda)*delta_x/p.D;
+  double delta_t=sqrt(p.lambda)*delta_x/p.D;
   p.nt=(p.tf-p.ti)/(delta_t); //1020 da bien
   
   double vP[p.nx];//Vector Previo
@@ -40,12 +40,10 @@ void resolver_metodo(hiper p, FILE* archivo)
   }
 
   rellenarVectorA(p,vA,x);
-  
-  printf("%f %f %f %d\n", p.ti,p.tf,delta_t,p.nt);
 
-  double t=0;
+  printf("ti=%f tf=%f dt=%f dx=%f nt=%d\n", p.ti,p.tf,delta_t,delta_x,p.nt);
+
   for (int time = 0; time < p.nt; time+=1) {//iteracion de puntos
-    t+=delta_t;
     // Puntos a un tiempo siguiente, fuera de los bordes
     for (int i = 1; i < p.nx-1; ++i) {
       vS[i]=2.0*(1.0-lambda2)*vA[i]+lambda2*(vA[i+1]+vA[i-1])-vP[i];
@@ -59,7 +57,7 @@ void resolver_metodo(hiper p, FILE* archivo)
     if(p.beta[0]==0){
       vS[0]=p.gamma[0]/ p.alpha[0];
     }
-     
+
     vS[p.nx-1]=-2.0*delta_x/p.beta[1]*( p.alpha[1]*vS[p.nx-2] - p.gamma[1]) + vS[p.nx-3];
 
     if(p.beta[1]==0){
