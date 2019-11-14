@@ -5,3 +5,4 @@ Tarea 2:
 
 
 ![](Tarea2/Problema1/animacion.gif)
+![](Tarea2/Problema4/animacion.gif)
