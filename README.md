@@ -7,6 +7,6 @@ Animacion de Problema 1:
 
 ![](Tarea2/Problema1/animacion.gif)
 
-Animacion de Problema 2:
+Animacion de Problema 4:
 
 ![](Tarea2/Problema4/animacion.gif)
