@@ -37,7 +37,7 @@ int main(void )
 
   for (int i = 0; i < N; ++i) {
     // Obtenemos variable aleatoria
-    var_rand = gsl_rng_uniform(r)/(b-a); 
+    var_rand = gsl_rng_uniform(r)*(b-a)+a; 
     fun_eval = funcionAIntegrar(var_rand);
     sum = sum + fun_eval;
   }
