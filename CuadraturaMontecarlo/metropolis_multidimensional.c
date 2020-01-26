@@ -2,17 +2,18 @@
  * multidimensionales de mecanica estadística mediante algoritmo de metropolis.
  *
  * Sean n átomos con hamiltoniano H
- * Determinar promedios de observables (e.potencial promedio, etc).
+ * Objetivo: Determinar promedios de observables (e.potencial promedio, etc).
  * 
  * O = int ( O(x) * q(x)dx) 
  *
  * Donde q(x) es la distribucion de probabilidad del sistema en el estado x
  * Sea p(x) = Z q(x), siendo p(x) la distribucion no normalizada
+ * Problema, no conocemos q(x), sólo p(x)
  * 
  * Algoritmo de metropolis.
  * Objetivo: Crear serie de estados {x1,x2..xn},
-    proponiendo un xt=xn + perturbacion 
- * Se define la probabilidad de aceptacion de xt como
+    proponiendo un xt=xn + perturbacion que sigan la distribucion q(x)
+ * Se define la probabilidad de aceptacion de xt como:
  *
  * Pr(A|xt,xn) = min( p(xt)/p(xn), 1) 
  *
@@ -20,6 +21,8 @@
     cada uno compuesto de N átomos que son representados
     por sus tres coordenadas espaciales
     , en total son 3N*M numeros aleatorios
+    
+    
  */
 
 
@@ -97,6 +100,7 @@ int main(void )
 
   //las variables aleatoreas no pueden ser guardadas en un vector simple tan grande
   //ya que el comando linux ulimit -s dicta cuanta memoria stacked le da al programa
+  //por lo tanto, utilizamos malloc
   
   double** estado_actual = malloc(sizeof(double*) * num_moleculas);
   double** estado_siguiente = malloc(sizeof(double*) * num_moleculas);
