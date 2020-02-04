@@ -32,8 +32,8 @@
  
 int main(/*int argc, char *argv[]*/)
 {
-  int num_moleculas = 80;
-  int num_sistemas = 1e3;
+  int num_moleculas = 24;
+  int num_sistemas = 1e2;
   double aceptados = 1;
   double ratio_aceptacion;
   
@@ -47,6 +47,21 @@ int main(/*int argc, char *argv[]*/)
   // 1 dmax distantcia maxima de random
   // 2 pow(sigma,2) diametro al cuadrado
   // 3 sigma/2 radio
+
+
+  /* Variables de histograma */
+  // EL numero de particiones del histograma
+  int num_hist = 1000;
+  
+  double ** hist = malloc(sizeof(double*) * num_hist);
+  for (int i = 0; i < num_hist; ++i) {
+    hist[i] = malloc(sizeof(double) * num_sistemas);
+  }
+
+  double ** prom_hist = malloc(sizeof(double*) * num_hist);
+  for (int i = 0; i < num_hist; ++i) {
+    prom_hist[i] = malloc(sizeof(double) * 2);
+  }
   
   FILE *archivo;
   archivo = fopen("coordenadas.xyz", "w");
@@ -91,18 +106,27 @@ int main(/*int argc, char *argv[]*/)
     }
     
     copiarVectores(estado_actual, estado_siguiente, num_moleculas, 3);
-    /* TODO: Histograma */
 
+    /* TODO: Histograma */
+    histograma(estado_actual, num_moleculas, hist, i, num_hist);
   }
-  
+
   /* TODO: Analizar sistema */
+  analizarHistograma(hist, num_sistemas, num_hist, prom_hist);
 
   /* TODO: Salida del sistema */
-  //imprimirEstado(estado_actual, num_moleculas, archivo, parametros);
+  imprimirEstado(estado_actual, num_moleculas, archivo, parametros);
+
+  FILE *histograma;
+  histograma = fopen("distribucion_radial.dat", "w");
+  imprimirDatosGrafico(prom_hist, num_hist, histograma);
+  fclose(histograma);
   
   fclose(archivo);
   free(estado_actual);
-  //free(estado_siguiente);
+  free(estado_siguiente);
+  free(hist);
+  free(prom_hist);
   
   return 0;
 }

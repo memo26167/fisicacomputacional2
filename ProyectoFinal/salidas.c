@@ -32,3 +32,13 @@ void imprimirEstado(double ** estado,int num_moleculas, FILE* archivo, double* p
   }
   
 }
+
+
+void imprimirDatosGrafico(double** matriz, int dimension, FILE* archivo)
+/* Imprime matriz mx2 */
+{
+  for (int i = 0; i < dimension; ++i) {
+    fprintf(archivo, "%E %E\n", matriz[i][0], matriz[i][1]);
+  }
+  
+}
