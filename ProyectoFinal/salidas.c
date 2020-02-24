@@ -1,4 +1,4 @@
-#include <stdio.h>
+ #include <stdio.h>
 #include <stdlib.h>
 #include "header.h"
 
@@ -7,7 +7,7 @@ void imprimirEstado(double ** estado,int num_moleculas, FILE* archivo, double* p
    En formato XYZ para que lo acepte OVITO
 */
 {
-  double radio = parametros[3];
+  double radio = parametros[0]/2;
   //*** CONFIGURACION DE ARCHIVO XYZ ***
 
   //numero de particulas
@@ -35,10 +35,20 @@ void imprimirEstado(double ** estado,int num_moleculas, FILE* archivo, double* p
 
 
 void imprimirDatosGrafico(double** matriz, int dimension, FILE* archivo)
-/* Imprime matriz mx2 */
+/* Imprime matriz de dimensiones dimension*2 */
 {
   for (int i = 0; i < dimension; ++i) {
     fprintf(archivo, "%E %E\n", matriz[i][0], matriz[i][1]);
   }
   
+}
+
+void copiarVectores(double ** a, double** b, int size_x, int size_y)
+// Funcion que copia la matriz "b" en la "a"
+{
+  for (int i = 0; i < size_x; ++i) {
+    for (int j = 0; j < size_y; ++j) {
+      a[i][j] = b[i][j];
+    }
+  }
 }

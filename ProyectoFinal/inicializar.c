@@ -1,61 +1,77 @@
-/* Programa que inicializa el sistme en una red HEXAGONAL,
-   Entradas: estado del sistema, diametro de pelotas, 
-   Salidas:  estado
-   Consideraciones: Volumen del sistema = 1*/
 
+#include <stdlib.h>
+#include <stdio.h>
 #include "header.h"
 
 void inicializar(double ** estado, int num_moleculas, double* parametros)
+/* Programa que inicializa el sistme en una red FCC,
+   Entradas: estado del sistema, diametro de pelotas, 
+   Salidas:  estado
+   Consideraciones: Volumen del sistema = 1*/
 {
-  int imax = ceil( pow(num_moleculas,1.0/3.0));
-  int jmax = ceil( pow(num_moleculas,1.0/3.0));
-  int kmax = floor( pow(num_moleculas,1.0/3.0));
-  /* printf("%d", imax); */
-  /* printf("%d", jmax); */
-  /* printf("%d", kmax); */
-  if(imax*jmax*kmax < num_moleculas){
-    kmax = ceil( pow(num_moleculas,1.0/3.0));
-  }
+  // R es el radio de una molecula
+  double R = parametros[0]/2.0;
+
+  // Tamaño de la celda unitaria
+  double a = 2.0*sqrt(2.0)*R;
   
-  // n es el índice de la molecula
+  // Celda unitaria FCC
+  double U[4][3]={
+    { 0, 0, 0},
+    { a/2, a/2, 0},
+    { 0, a/2, a/2},
+    { a/2, 0, a/2}};
+
+  
+  // Cada celda unitaria tiene 4 átomos
+  // Calculo de celdas unitarias por cada eje
+  double cpj = pow(num_moleculas/4.0, 1.0/3.0);
+
+  int imax = floor(cpj);
+  int jmax = imax;
+  int kmax = imax;
+  if ( imax*jmax*kmax*4 < num_moleculas ) { imax = ceil(cpj); }
+  if ( imax*jmax*kmax*4 < num_moleculas ) { jmax = ceil(cpj); }
+  if ( imax*jmax*kmax*4 < num_moleculas ) { kmax = ceil(cpj); }
+
+  // indice del número de moleculas
   int n = 0;
 
-  // R es el radio de una molecula
-  double R = parametros[3];
+  // la coordenada espacial de una celda a probar
+  double x = 0;
+  double y = 0;
+  double z = 0;
 
-  // auxiliar para romper for
-  
-  int aux = 0;
-  for (int i = 0; i < imax; ++i) {
+  for (int k = 0; k < kmax; ++k) {
     for (int j = 0; j < jmax; ++j) {
-      for (int k = 0; k < kmax; ++k) {
-        estado[n][0] = R*(1.0 + 2.0*sqrt(6.0)/3.0*k);//z;
-	estado[n][1] = R*(1.0 + sqrt(3.0)*(j + k%2/3) );//x;
-	estado[n][2] = R*(2*(i+1) - (j + k)% 2);//y;
+      for (int i = 0; i < imax; ++i) {
 
-	++n;
-	
-	if(n == num_moleculas){
-	  aux = 1;
+	// calculo de la ubicacion de la posible siguiente celda
+	x = a*(double)i;
+	y = a*(double)j;
+	z = a*(double)k;
+
+	// iteramos en la celda unitaria U
+	for (int l = 0;  l < 4; ++ l) {
+	  /* si la ubicacion de la molecula de la celda unitaria 
+	     esta dentro del volumen total, aceptamos*/
+
+	  if( x + U[l][0]< 1 ){ // - 2*R ){
+	    if( y + U[l][1]< 1 ){
+	      if( z + U[l][2]< 1 ){
+		
+		if (n < num_moleculas) {
+		  
+		  
+		  estado[n][0] = x + U[l][0];
+		  estado[n][1] = y + U[l][1];
+		  estado[n][2] = z + U[l][2];
+		  ++n;
+		  
+		  //cierre de if
+		}}}}
 	}
-
-	//rompemos primero for
-	if(aux == 1){
-	  break;
-	}	
       }
-
-      //rompemos segundo for
-      if(aux == 1){
-	break;
-      } 
     }
-
-    //rompemos tercer for
-    if(aux == 1){
-      break;
-    }    
   }
-  
-  
 }
