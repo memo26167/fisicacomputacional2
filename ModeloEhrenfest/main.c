@@ -10,7 +10,7 @@
 #include <gsl/gsl_rng.h>
 
 #define N 100
-#define Pasos 100000
+#define Pasos 200
 #define Print_Usuario 0
 
 void modeloEhrenfest(void){
